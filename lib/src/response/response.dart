@@ -25,6 +25,10 @@ sealed class DouYinResponse {
     }
     return result(argument);
   }
+
+  Record asString() {
+    return ();
+  }
 }
 
 class DouYinAuthResponse extends DouYinResponse {
@@ -67,5 +71,16 @@ class DouYinAuthResponse extends DouYinResponse {
       "state": state,
       "grantedPermissions": grantedPermissions
     });
+  }
+
+  @override
+  Record asString() {
+    return (
+      errorCode: errorCode,
+      errorMsg: errorMsg,
+      authCode: authCode,
+      state: state,
+      grantedPermissions: grantedPermissions
+    );
   }
 }
