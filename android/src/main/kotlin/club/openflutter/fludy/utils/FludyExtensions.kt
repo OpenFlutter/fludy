@@ -15,7 +15,6 @@ internal fun Activity.startFlutterActivity(
     extra: Intent,
 ) {
     flutterActivityIntent()?.also { intent ->
-        intent.addFluwxExtras()
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         intent.putExtra(KEY_FLUDY_EXTRA, extra)
         intent.putExtra(FLAG_PAYLOAD_FROM_DOUYIN, true)
@@ -36,10 +35,6 @@ internal fun Context.flutterActivityIntent(): Intent? {
             it.setClassName(this, "${packageName}.${FludyConfigurations.flutterActivity}")
         }
     }
-}
-
-internal fun Intent.addFluwxExtras() {
-    putExtra("fluwx_payload_from_fluwx", true)
 }
 
 internal fun Intent.readDouYinCallbackIntent(): Intent? {

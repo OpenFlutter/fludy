@@ -3,6 +3,7 @@ package club.openflutter.fludy
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import club.openflutter.fludy.utils.readDouYinCallbackIntent
 import com.bytedance.sdk.open.aweme.CommonConstants
@@ -49,7 +50,7 @@ class FludyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentLi
                             "state" to response.state,
                             "cancel" to response.isCancel,
                             "authCode" to response.authCode,
-                            "grantedPermissions" to response.grantedPermissions.split(","),
+                            "grantedPermissions" to response.grantedPermissions?.split(","),
                             "errorCode" to response.errorCode,
                             "errorMsg" to response.errorMsg
                         )
@@ -142,12 +143,14 @@ class FludyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentLi
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         currentActivity = binding.activity
+        binding.addOnNewIntentListener(this)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        onAttachedToActivity(binding)
     }
 
     override fun onDetachedFromActivity() {

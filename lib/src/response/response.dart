@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 typedef _DouYinResponseInvoker = DouYinResponse Function(Map argument);
 
 Map<String, _DouYinResponseInvoker> _nameAndResponseMapper = {
@@ -28,7 +30,15 @@ sealed class DouYinResponse {
 class DouYinAuthResponse extends DouYinResponse {
   DouYinAuthResponse.fromMap(Map map)
       : authCode = map['authCode'],
-        grantedPermissions = map['grantedPermissions'] ?? [],
+        grantedPermissions = (() {
+          List<String> result = [];
+          (map["grantedPermissions"] as List<Object?>?)?.forEach((element) {
+            if (element is String) {
+              result.add(element);
+            }
+          });
+          return result;
+        }).call(),
         state = map['state'],
         super._(map[_errorCodeKey], map[_errorMsgKey]);
 
@@ -47,4 +57,15 @@ class DouYinAuthResponse extends DouYinResponse {
   @override
   int get hashCode =>
       super.hashCode + errorCode.hashCode & 1345 + errorMsg.hashCode & 15;
+
+  @override
+  String toString() {
+    return jsonEncode({
+      _errorCodeKey: errorCode,
+      _errorMsgKey: errorMsg,
+      "authCode": authCode,
+      "state": state,
+      "grantedPermissions": grantedPermissions
+    });
+  }
 }
