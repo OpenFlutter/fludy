@@ -26,7 +26,7 @@ sealed class DouYinResponse {
     return result(argument);
   }
 
-  Record asString() {
+  Record toRecord() {
     return ();
   }
 }
@@ -74,7 +74,7 @@ class DouYinAuthResponse extends DouYinResponse {
   }
 
   @override
-  Record asString() {
+  Record toRecord() {
     return (
       errorCode: errorCode,
       errorMsg: errorMsg,
