@@ -17,10 +17,5 @@ class FludyWeb extends FludyPlatform {
     FludyPlatform.instance = FludyWeb();
   }
 
-  /// Returns a [String] containing the version of the platform.
-  @override
-  Future<String?> getPlatformVersion() async {
-    final version = html.window.navigator.userAgent;
-    return version;
-  }
+
 }

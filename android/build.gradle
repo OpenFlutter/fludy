@@ -1,3 +1,5 @@
+import org.yaml.snakeyaml.Yaml
+
 group 'com.example.fludy'
 version '1.0-SNAPSHOT'
 
@@ -9,7 +11,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath "org.yaml:snakeyaml:2.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -27,10 +30,10 @@ apply plugin: 'kotlin-android'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'com.example.fludy'
+        namespace 'club.openflutter.fludy'
     }
 
-    compileSdkVersion 33
+    compileSdk 33
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -42,7 +45,7 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += ['src/main/kotlin', "${buildDir}/generated/src/kotlin"]
         test.java.srcDirs += 'src/test/kotlin'
     }
 
@@ -54,6 +57,7 @@ android {
         implementation 'com.bytedance.ies.ugc.aweme:opensdk-china-external:0.1.9.9'
         implementation 'com.bytedance.ies.ugc.aweme:opensdk-common:0.1.9.9'
         implementation "androidx.core:core-ktx:1.12.0"
+        implementation "androidx.appcompat:appcompat:1.6.1"
         implementation 'androidx.annotation:annotation:1.7.0'
         implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.22"))
         testImplementation 'org.jetbrains.kotlin:kotlin-test'
@@ -70,5 +74,71 @@ android {
                showStandardStreams = true
             }
         }
+    }
+}
+
+Map loadPubspec() {
+    def path = rootProject.projectDir.parent + File.separator + "pubspec.yaml"
+    InputStream input = new FileInputStream(new File(path))
+    Yaml yaml = new Yaml()
+    Map projectConfig = yaml.load(input)
+
+    return projectConfig
+}
+
+
+tasks.register("generateFludyHelperFile") {
+    Map config = loadPubspec()
+    Map fluwx = (Map) config.get("fludy")
+    String enableLogging = "false"
+    String interruptWeChatRequestByFludy = "true"
+    String flutterActivity = ""
+    if (fluwx) {
+        Map android = (Map) fluwx.get("android")
+        if (android) {
+            def iwr = android.get("interrupt_dy_request")
+            if (iwr && iwr == "true" || iwr == "false") {
+                interruptWeChatRequestByFludy = (String) iwr
+            }
+
+            def activity = android.get("flutter_activity")
+            if (activity) {
+                flutterActivity = (String) activity
+            }
+        }
+
+        def logging = fluwx.get("debug_logging")
+        if (logging && logging == "true" || logging == "false") {
+            enableLogging = (String) logging
+        }
+    }
+
+    generateFludyConfigurations(interruptWeChatRequestByFludy, flutterActivity, enableLogging)
+}
+
+def generateFludyConfigurations(String interruptWeChatRequestByFluwx, String flutterActivity, String enableLogging) {
+    File generateFolder = new File("${buildDir}/generated/src/kotlin/club/openflutter/fludy")
+
+    String template = "package club.openflutter.fludy\n" +
+            "\n" +
+            "// auto generated\n" +
+            "internal object FludyConfigurations {\n" +
+            "    val flutterActivity: String = \"&&flutterActivity&&\"\n" +
+            "    val enableLogging: Boolean = &&enableLogging&&\n" +
+            "    val interruptDouYinRequestByFluwx: Boolean = &&interruptDouYinRequestByFludy&&\n" +
+            "}"
+    if (!generateFolder.exists()) {
+        generateFolder.mkdirs()
+    }
+
+    String source = template.replace("&&interruptDouYinRequestByFludy&&", interruptWeChatRequestByFluwx)
+            .replace("&&flutterActivity&&", flutterActivity)
+            .replace("&&enableLogging&&", enableLogging)
+    file("${generateFolder.absolutePath}/FludyConfigurations.kt").text = source
+}
+
+tasks.withType(JavaCompile) { javaCompile ->
+    javaCompile.configure {
+        dependsOn("generateFludyHelperFile")
     }
 }

@@ -1,0 +1,35 @@
+PODS:
+  - DouyinOpenSDK (4.1.8)
+  - fludy (0.0.1):
+    - DouyinOpenSDK (~> 4.1.8)
+    - Flutter
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - fludy (from `.symlinks/plugins/fludy/ios`)
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+SPEC REPOS:
+  trunk:
+    - DouyinOpenSDK
+
+EXTERNAL SOURCES:
+  fludy:
+    :path: ".symlinks/plugins/fludy/ios"
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  DouyinOpenSDK: 4683d295533bf4662d95d9458c96bf25016be3f1
+  fludy: 885aa253d95fa80042d4a848467210ee15d88361
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  integration_test: 13825b8a9334a850581300559b8839134b124670
+
+PODFILE CHECKSUM: 6b9eb94e9f98a329f2ef624b852a6e42d090af2b
+
+COCOAPODS: 1.12.1

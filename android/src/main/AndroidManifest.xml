@@ -1,3 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.example.fludy">
+  package="club.openflutter.fludy">
+    <queries>
+        <!-- 允许查询抖音和抖音极速版的信息 -->
+        <package android:name="com.ss.android.ugc.aweme" />
+        <package android:name="com.ss.android.ugc.aweme.lite" />
+    </queries>
+    <application>
+        <activity-alias
+            android:name="${applicationId}.douyinapi.DouYinEntryActivity"
+            android:targetActivity="com.openflutter.fludy.callback.DyCallbackActivity"
+            android:taskAffinity="${applicationId}"
+            android:launchMode="singleTask"
+            android:theme="@style/DisablePreviewTheme"/>
+    </application>
 </manifest>

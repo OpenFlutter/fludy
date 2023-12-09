@@ -1,7 +1,7 @@
 name: fludy
-description: "A new Flutter project."
+description: "Flutter plugin for DouYin SDK, supports auth."
 version: 0.0.1
-homepage:
+homepage: https://github.com/OpenFlutter/fludy
 
 environment:
   sdk: '>=3.2.2 <4.0.0'
@@ -37,7 +37,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.fludy
+        package: club.openflutter.fludy
         pluginClass: FludyPlugin
       ios:
         pluginClass: FludyPlugin

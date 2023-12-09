@@ -1,6 +1,8 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'fludy_method_channel.dart';
+import 'foundation/arguments.dart';
+import 'response/response.dart';
 
 abstract class FludyPlatform extends PlatformInterface {
   /// Constructs a FludyPlatform.
@@ -23,7 +25,19 @@ abstract class FludyPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  Stream<DouYinResponse> get responseEventHandler {
+    throw UnimplementedError('responseEventHandler has not been implemented.');
+  }
+
+  Future<void> initializeApi({required DouYinOpenSDKConfig config}) {
+    throw UnimplementedError('initializeApi() has not been implemented.');
+  }
+
+  Future<bool> authorization({required AuthType which}) {
+    throw UnimplementedError('authorization() has not been implemented.');
+  }
+
+  Future<bool> get isDouYinInstalled {
+    throw UnimplementedError('isDouYinInstalled has not been implemented.');
   }
 }
