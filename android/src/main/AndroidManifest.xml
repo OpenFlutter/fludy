@@ -6,11 +6,15 @@
         <package android:name="com.ss.android.ugc.aweme.lite" />
     </queries>
     <application>
+        <activity android:name=".callback.DyCallbackActivity"
+            android:exported="false"
+            />
         <activity-alias
             android:name="${applicationId}.douyinapi.DouYinEntryActivity"
-            android:targetActivity="com.openflutter.fludy.callback.DyCallbackActivity"
+            android:targetActivity=".callback.DyCallbackActivity"
             android:taskAffinity="${applicationId}"
             android:launchMode="singleTask"
+            android:exported="true"
             android:theme="@style/DisablePreviewTheme"/>
     </application>
 </manifest>

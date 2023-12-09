@@ -24,8 +24,7 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener
 
 
 /** FludyPlugin */
-class FludyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener,
-    IApiEventHandler {
+class FludyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentListener {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -36,6 +35,38 @@ class FludyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentLi
 
     private var applicationContext: Context? = null
     private var currentActivity: Activity? = null
+
+    private var dyApiHandler = object : IApiEventHandler {
+        override fun onReq(p0: BaseReq?) {
+
+        }
+
+        override fun onResp(resp: BaseResp?) {
+            when (resp?.type) {
+                CommonConstants.ModeType.SEND_AUTH_RESPONSE -> {
+                    (resp as? Authorization.Response)?.let { response ->
+                        val result = mapOf(
+                            "state" to response.state,
+                            "cancel" to response.isCancel,
+                            "authCode" to response.authCode,
+                            "grantedPermissions" to response.grantedPermissions.split(","),
+                            "errorCode" to response.errorCode,
+                            "errorMsg" to response.errorMsg
+                        )
+
+                        douYinChannel.invokeMethod("onAuthResponse", result)
+                    }
+                }
+
+                else -> {}
+            }
+
+        }
+
+        override fun onErrorIntent(p0: Intent?) {
+
+        }
+    }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         applicationContext = flutterPluginBinding.applicationContext
@@ -127,39 +158,9 @@ class FludyPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, NewIntentLi
 
     private fun letDouYinHandleIntent(intent: Intent): Boolean =
         intent.readDouYinCallbackIntent()?.let {
-            douYinOpenApi?.handleIntent(it, this) ?: false
+            douYinOpenApi?.handleIntent(it, dyApiHandler) ?: false
         } ?: run {
             false
         }
-
-    override fun onReq(p0: BaseReq?) {
-
-    }
-
-    override fun onResp(resp: BaseResp?) {
-        when (resp?.type) {
-            CommonConstants.ModeType.SEND_AUTH_RESPONSE -> {
-                (resp as? Authorization.Response)?.let { response ->
-                    val result = mapOf(
-                        "state" to response.state,
-                        "cancel" to response.isCancel,
-                        "authCode" to response.authCode,
-                        "grantedPermissions" to response.grantedPermissions.split(","),
-                        "errorCode" to response.errorCode,
-                        "errorMsg" to response.errorMsg
-                    )
-
-                    douYinChannel.invokeMethod("onAuthResponse", result)
-                }
-            }
-
-            else -> {}
-        }
-
-    }
-
-    override fun onErrorIntent(p0: Intent?) {
-
-    }
 
 }
