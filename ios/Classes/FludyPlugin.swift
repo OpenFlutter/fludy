@@ -99,7 +99,7 @@ public class FludyPlugin: NSObject, FlutterPlugin {
                             resultArguments["grantedPermissions"] = grantedPermissions
                         }
                         
-                        resultArguments["errorCode"] = resp.errCode
+                        resultArguments["errorCode"] = resp.errCode.rawValue
                         
                         if let errorMsg = resp.errString {
                             resultArguments["errorMsg"] = errorMsg
