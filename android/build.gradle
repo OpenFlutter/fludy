@@ -90,12 +90,12 @@ Map loadPubspec() {
 tasks.register("generateFludyHelperFile") {
   doFirst {
       Map config = loadPubspec()
-      Map fluwx = (Map) config.get("fludy")
+      Map fludy = (Map) config.get("fludy")
       String enableLogging = "false"
       String interruptWeChatRequestByFludy = "true"
       String flutterActivity = ""
-      if (fluwx) {
-          Map android = (Map) fluwx.get("android")
+      if (fludy) {
+          Map android = (Map) fludy.get("android")
           if (android) {
               def iwr = android.get("interrupt_dy_request")
               if (iwr && iwr == "true" || iwr == "false") {
@@ -108,7 +108,7 @@ tasks.register("generateFludyHelperFile") {
               }
           }
 
-          def logging = fluwx.get("debug_logging")
+          def logging = fludy.get("debug_logging")
           if (logging && logging == "true" || logging == "false") {
               enableLogging = (String) logging
           }
