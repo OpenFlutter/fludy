@@ -140,5 +140,5 @@ def generateFludyConfigurations(String interruptWeChatRequestByFluwx, String flu
 }
 
 android.libraryVariants.configureEach {
-    it.registerGeneratedResFolders(project.files(new File("${buildDir}/generated/src/kotlin/club/openflutter/fludy")).builtBy(generateFluwxHelperFile))
+    it.registerGeneratedResFolders(project.files(new File("${buildDir}/generated/src/kotlin/club/openflutter/fludy")).builtBy(generateFludyHelperFile))
 }
