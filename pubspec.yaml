@@ -1,6 +1,6 @@
 name: fludy
 description: "Flutter plugin for DouYin SDK, supports auth."
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/OpenFlutter/fludy
 
 environment:
