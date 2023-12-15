@@ -48,7 +48,8 @@ public class FludyPlugin: NSObject, FlutterPlugin {
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
     case "initializeApi":
-        let args = call.arguments as? Dictionary<String, String>
+        let args = call.arguments as? [String:String]
+
         if let clientKey = args?["clientKey"] {
             DouyinOpenSDKApplicationDelegate.sharedInstance().registerAppId(clientKey)
         }
@@ -69,7 +70,7 @@ public class FludyPlugin: NSObject, FlutterPlugin {
                 let request : DouyinOpenSDKAuthRequest = DouyinOpenSDKAuthRequest()
 
                 request.permissions = NSOrderedSet(array: scopeList)
-                let additionalPermissions = args?["additionalPermissions"] as? [String]
+                let additionalPermissions = args?["additionalPermissions"] as? [String:String]
                 if let ap = additionalPermissions {
                     request.additionalPermissions = NSOrderedSet(objects: ap)
                 }
